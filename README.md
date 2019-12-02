@@ -5,6 +5,8 @@
 
 Generator of webfonts from SVG icons.
 
+<b>Note:</b> This is a fork of webfont-generator.<br>
+
 Features:
 
 * Supported font formats: WOFF2, WOFF, EOT, TTF and SVG.
