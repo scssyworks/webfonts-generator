@@ -2,7 +2,7 @@ var fs = require('fs')
 var _ = require('underscore')
 var Q = require('q')
 
-var svgicons2svgfont = require('svgicons2svgfont')
+var SVGIcons2SVGFontStream = require('svgicons2svgfont')
 var svg2ttf = require('svg2ttf')
 var ttf2woff = require('ttf2woff')
 var ttf2woff2 = require('ttf2woff2')
@@ -21,7 +21,7 @@ var ttf2eot = require('ttf2eot')
  */
 var generators = {
 	svg: {
-		fn: function(options, done) {
+		fn: function (options, done) {
 			var font = new Buffer(0)
 			var svgOptions = _.pick(options,
 				'fontName', 'fontHeight', 'descent', 'normalize', 'round'
@@ -31,27 +31,27 @@ var generators = {
 				svgOptions = _.extend(svgOptions, options.formatOptions['svg'])
 			}
 
-			svgOptions.log = function(){}
+			svgOptions.log = function () { }
 
-			var fontStream = svgicons2svgfont(svgOptions)
-				.on('data', function(data) {
+			var fontStream = (new SVGIcons2SVGFontStream(svgOptions))
+				.on('data', function (data) {
 					font = Buffer.concat([font, data])
 				})
-				.on('end', function() {
+				.on('end', function () {
 					done(null, font.toString())
 				})
 
-			_.each(options.files, function(file, idx) {
+			_.each(options.files, function (file, idx) {
 				var glyph = fs.createReadStream(file)
 				var name = options.names[idx]
 				var unicode = String.fromCharCode(options.codepoints[name])
-                var ligature = ''
-                for(var i=0;i<name.length;i++) {
-                    ligature+=String.fromCharCode(name.charCodeAt(i))
-                }
+				var ligature = ''
+				for (var i = 0; i < name.length; i++) {
+					ligature += String.fromCharCode(name.charCodeAt(i))
+				}
 				glyph.metadata = {
 					name: name,
-					unicode: [unicode,ligature]
+					unicode: [unicode, ligature]
 				}
 				fontStream.write(glyph)
 			})
@@ -62,7 +62,7 @@ var generators = {
 
 	ttf: {
 		deps: ['svg'],
-		fn: function(options, svgFont, done) {
+		fn: function (options, svgFont, done) {
 			var font = svg2ttf(svgFont, options.formatOptions['ttf'])
 			font = new Buffer(font.buffer)
 			done(null, font)
@@ -71,7 +71,7 @@ var generators = {
 
 	woff: {
 		deps: ['ttf'],
-		fn: function(options, ttfFont, done) {
+		fn: function (options, ttfFont, done) {
 			var font = ttf2woff(new Uint8Array(ttfFont), options.formatOptions['woff'])
 			font = new Buffer(font.buffer)
 			done(null, font)
@@ -80,7 +80,7 @@ var generators = {
 
 	woff2: {
 		deps: ['ttf'],
-		fn: function(options, ttfFont, done) {
+		fn: function (options, ttfFont, done) {
 			var font = ttf2woff2(new Uint8Array(ttfFont), options.formatOptions['woff2'])
 			font = new Buffer(font.buffer)
 			done(null, font)
@@ -89,7 +89,7 @@ var generators = {
 
 	eot: {
 		deps: ['ttf'],
-		fn: function(options, ttfFont, done) {
+		fn: function (options, ttfFont, done) {
 			var font = ttf2eot(new Uint8Array(ttfFont), options.formatOptions['eot'])
 			font = new Buffer(font.buffer)
 			done(null, font)
@@ -100,7 +100,7 @@ var generators = {
 /**
  * @returns Promise
  */
-var generateFonts = function(options) {
+var generateFonts = function (options) {
 	var genTasks = {}
 
 	/**
@@ -108,12 +108,12 @@ var generateFonts = function(options) {
 	 * Then creates task for specified font type and chains it to dependencies promises.
 	 * If some task already exists, it reuses it.
 	 */
-	var makeGenTask = function(type) {
+	var makeGenTask = function (type) {
 		if (genTasks[type]) return genTasks[type]
 
 		var gen = generators[type]
 		var depsTasks = _.map(gen.deps, makeGenTask)
-		var task = Q.all(depsTasks).then(function(depsFonts) {
+		var task = Q.all(depsTasks).then(function (depsFonts) {
 			var args = [options].concat(depsFonts)
 			return Q.nfapply(gen.fn, args)
 		})
@@ -127,7 +127,7 @@ var generateFonts = function(options) {
 		makeGenTask(type)
 	}
 
-	return Q.all(_.values(genTasks)).then(function(results) {
+	return Q.all(_.values(genTasks)).then(function (results) {
 		return _.object(_.keys(genTasks), results)
 	})
 }
