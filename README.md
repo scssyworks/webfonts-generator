@@ -5,7 +5,7 @@
 
 Generator of webfonts from SVG icons.
 
-<b>Note:</b> This is a fork of webfont-generator.<br>
+<b>Note:</b> This is a fork of <a href="https://github.com/sunflowerdeath/webfonts-generator">webfonts-generator</a>.<br>
 
 Features:
 
