@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sunflowerdeath/webfonts-generator2.git"
+    "url": "https://github.com/scssyworks/webfonts-generator2.git"
   },
   "keywords": [
     "font",
@@ -21,10 +21,10 @@
     "woff",
     "woff2"
   ],
-  "author": "sunflowerdeath",
-  "license": "Unlicense",
+  "author": "scssyworks",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sunflowerdeath/webfonts-generator2/issues"
+    "url": "https://github.com/scssyworks/webfonts-generator2/issues"
   },
   "dependencies": {
     "handlebars": "^4.5.3",

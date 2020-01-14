@@ -1,11 +1,10 @@
 # webfonts-generator2
 
-
 [![Build Status](https://travis-ci.org/sunflowerdeath/webfonts-generator.svg?branch=master)](https://travis-ci.org/sunflowerdeath/webfonts-generator2)
 
 Generator of webfonts from SVG icons.
 
-<b>Note:</b> This is a fork of <a href="https://github.com/sunflowerdeath/webfonts-generator">webfonts-generator</a>.<br>
+<b>Note:</b> This is a fork of <a href="https://github.com/sunflowerdeath/webfonts-generator">webfonts-generator</a>. We have updated the dependencies and re-released it under MIT license.<br>
 
 Features:
 
