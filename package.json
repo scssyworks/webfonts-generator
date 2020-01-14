@@ -1,6 +1,6 @@
 {
   "name": "webfonts-generator2",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Generator of webfonts from svg icons",
   "main": "src/index.js",
   "directories": {
